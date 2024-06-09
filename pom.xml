@@ -15,6 +15,7 @@
 	<description>API for NTD calculator assignement  by Irving Palma</description>
 	<properties>
 		<java.version>21</java.version>
+		<spring-security.version>6.3.0</spring-security.version>
 	</properties>
 	<dependencies>
 		<dependency>
