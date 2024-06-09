@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/changeset/changeset-auth-detail.yml
+  - include:
+      file: liquibase/changeset/changeset-user.yml

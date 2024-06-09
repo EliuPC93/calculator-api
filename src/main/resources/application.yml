@@ -1,0 +1,49 @@
+spring:
+  banner:
+    image:
+      location: classpath:banner.jpg
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  datasource:
+    url: jdbc:mysql://${calculator.database.host}:3306/${calculator.database.db}
+    username: ${calculator.database.username}
+    password: ${calculator.database.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+springdoc:
+  api-docs:
+    path: /specs
+  swagger-ui:
+    enabled: true
+    path: /specs/ui
+    syntax-highlight:
+      activated: false
+calculator:
+  security:
+    crypto:
+      password: tHizIzAZECUREP4z5w0rd01!!!
+  jwt:
+    auth-header: Authorization
+    bearer: Bearer
+    secret: jWTZ3kr3T0019
+    validity: 216000
+  database:
+    db: calculatordb
+    host: localhost
+    username: ipalma
+    password: ntdcalculator123
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, configprops, env, metrics
+logging:
+  level:
+    root: ERROR
+    org.springframework: INFO
