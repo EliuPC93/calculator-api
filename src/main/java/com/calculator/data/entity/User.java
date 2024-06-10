@@ -21,8 +21,14 @@ public class User extends BaseEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "status")
+    private boolean status;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "authentication_detail_id", referencedColumnName = "id")
     private AuthenticationDetail authenticationDetail;
+
+    @OneToMany(mappedBy = "user")
+    private List<Credit> credits;
 
 }

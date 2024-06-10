@@ -1,5 +1,7 @@
 package com.calculator.core.service;
 
+import com.calculator.core.repository.CreditRepository;
+import com.calculator.data.entity.Credit;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,9 +15,6 @@ import com.calculator.data.entity.SecurityRole;
 import com.calculator.data.entity.User;
 import com.calculator.data.request.NewUser;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,6 +24,7 @@ import java.util.UUID;
 public class UserService {
 
     private UserRepository userRepository;
+    private CreditRepository creditRepository;
     private PasswordEncoder passwordEncryptor;
 
     public void register(NewUser newUser) {
@@ -42,9 +42,23 @@ public class UserService {
         AuthenticationDetail authenticationDetail = AuthenticationDetail.builder()
                 .roles(SecurityRole.ADMIN.getRole()).build();
 
-        User user = new User(newUser.getUsername(),
-                encryptedPassword, authenticationDetail);
+        User user = User.builder()
+                .username(newUser.getUsername())
+                .password(encryptedPassword)
+                .authenticationDetail(authenticationDetail)
+                .build();
+
         userRepository.save(user);
+
         log.debug("{} - New user have been stored with id {}", correlationId, user.getId());
+
+        Credit firstCredit = Credit.builder()
+                .amount(1000.00)
+                .user(user)
+                .build();
+
+        creditRepository.save(firstCredit);
+
+        log.debug("{} - New credit {} have been created to user with id {}", correlationId, firstCredit.getId(), user.getId());
     }
 }
