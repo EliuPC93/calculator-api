@@ -8,7 +8,8 @@ import java.util.List;
 @Getter
 public enum SecurityRole {
 
-    ADMIN("ADMIN");
+    ACTIVE("ACTIVE"),
+    INACTIVE("INACTIVE");
 
     String role;
     private static final String DELIMITER = ",";

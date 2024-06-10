@@ -51,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().userDetailsService(jwtUserDetailService)
                 .authorizeRequests().antMatchers("/", "/index", "/index.html", "/security/login").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/admin/*").hasAuthority(SecurityRole.ADMIN.getRole())
+                .authorizeRequests().antMatchers("/operations/*").hasAuthority(SecurityRole.ACTIVE.getRole())
                 .and()
                 .authorizeRequests().antMatchers("/users/*").permitAll()
                 .and()

@@ -40,7 +40,7 @@ public class UserService {
 
         log.debug("{} - Creating authentication details for user");
         AuthenticationDetail authenticationDetail = AuthenticationDetail.builder()
-                .roles(SecurityRole.ADMIN.getRole()).build();
+                .roles(SecurityRole.ACTIVE.getRole()).build();
 
         User user = User.builder()
                 .username(newUser.getUsername())
