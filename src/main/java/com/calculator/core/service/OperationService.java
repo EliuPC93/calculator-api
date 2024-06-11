@@ -9,12 +9,16 @@ import com.calculator.core.security.CalculatorAuthenticationProvider;
 import com.calculator.data.entity.*;
 import com.calculator.data.entity.Record;
 import com.calculator.data.request.NewOperation;
+import com.calculator.data.response.RecordDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -82,4 +86,16 @@ public class OperationService {
         }
     }
 
+    public List<RecordDto> fetchOperations(Integer page) {
+        String userId = authenticationProvider.getUserId();
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "User not found");
+        }
+        Pageable pageWithElements = PageRequest.of(page, 5);
+
+        // TODO: figure out why is retrieving just a few records
+        List<Record> records = recordRepository.findByUserId(userId, pageWithElements);
+        return records.stream().map(RecordDto::from).collect(Collectors.toList());
+    }
 }

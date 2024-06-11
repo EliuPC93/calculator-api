@@ -2,14 +2,20 @@ package com.calculator.controller;
 
 import com.calculator.core.service.OperationService;
 import com.calculator.data.request.NewOperation;
+import com.calculator.data.response.RecordDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import com.calculator.core.exception.CalculatorException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -27,5 +33,19 @@ public class OperationController {
     @PostMapping
     public void register(@Valid @RequestBody NewOperation newOperation) throws CalculatorException {
         operationService.register(newOperation);
+    }
+
+    @Operation(method = "GET", operationId = "fetchOperations", summary = "Get operations for user.",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200", content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = RecordDto.class))
+                    })
+            }, parameters = {
+            @Parameter(name = "page", description = "Page number"),
+    })
+    @GetMapping
+    public List<RecordDto> fetchOperations(@RequestParam("page") Integer page) throws CalculatorException {
+        return operationService.fetchOperations(page);
     }
 }
