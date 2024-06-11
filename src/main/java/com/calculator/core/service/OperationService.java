@@ -14,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -54,8 +52,9 @@ public class OperationService {
 
         Double balance = optionalUser.get().getCredits().get(0).getAmount();
 
-        List<Record> records = recordRepository.findByUserIdSortedByDate(optionalUser.get().getId());
+        List<Record> records =  optionalUser.get().getRecords();
         if (!records.isEmpty()) {
+            records.sort(Comparator.comparing(Record::getDate).reversed());
             balance = records.get(0).getUserBalance();
         }
 
