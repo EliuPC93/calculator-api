@@ -2,6 +2,7 @@ package com.calculator.core.service;
 
 import com.calculator.core.exception.CalculatorException;
 import com.calculator.core.exception.ErrorCode;
+import com.calculator.core.repository.OperationRepository;
 import com.calculator.core.repository.RecordRepository;
 import com.calculator.core.repository.UserRepository;
 import com.calculator.core.security.CalculatorAuthenticationProvider;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class OperationService {
     private RecordRepository recordRepository;
     private UserRepository userRepository;
+    private OperationRepository operationRepository;
     private CalculatorAuthenticationProvider authenticationProvider;
 
     public void register(NewOperation newOperation) {
@@ -38,9 +40,17 @@ public class OperationService {
         OperationType operationType = OperationType.fromValue(newOperation.getType());
 
         Operation operation = Operation.builder()
-                .type(operationType)
+                .type(operationType.toString())
                 .cost(operationType.getCost())
                 .build();
+
+        Optional<Operation> existingOperation = operationRepository.findByType(newOperation.getType());
+        if (existingOperation.isPresent()) {
+                operation = existingOperation.get();
+        } else {
+            operationRepository.save(operation);
+            log.debug("{} - New operation have been stored with id {}", correlationId, operation.getId());
+        }
 
         Double balance = optionalUser.get().getCredits().get(0).getAmount();
 
@@ -51,6 +61,7 @@ public class OperationService {
 
         Record record = Record.builder()
                 .user(optionalUser.get())
+                .operation(operation)
                 .date(LocalDateTime.now())
                 .amount(operation.getCost())
                 .build();

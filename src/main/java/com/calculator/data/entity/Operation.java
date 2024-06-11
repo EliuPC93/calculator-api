@@ -2,9 +2,7 @@ package com.calculator.data.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -16,7 +14,7 @@ import javax.persistence.Table;
 public class Operation extends BaseEntity {
 
     @Column(name = "type")
-    private OperationType type;
+    private String type;
 
     @Column(name = "cost")
     Double cost;
