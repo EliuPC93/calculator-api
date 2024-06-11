@@ -54,7 +54,7 @@ public class OperationService {
 
         Double balance = optionalUser.get().getCredits().get(0).getAmount();
 
-        List<Record> records = optionalUser.get().getRecords();
+        List<Record> records = recordRepository.findByUserIdSortedByDate(optionalUser.get().getId());
         if (!records.isEmpty()) {
             balance = records.get(0).getUserBalance();
         }
