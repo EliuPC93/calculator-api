@@ -28,6 +28,9 @@ public class Record extends BaseEntity {
     @Column(name = "operation_response")
     private Boolean operationResponse;
 
+    @Column(name = "active")
+    private Boolean active;
+
     @Column(name = "user_balance")
     private Double userBalance;
 

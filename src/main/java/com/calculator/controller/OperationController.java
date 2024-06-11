@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.calculator.core.exception.CalculatorException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @CrossOrigin
@@ -47,5 +48,15 @@ public class OperationController {
     @GetMapping
     public List<RecordDto> fetchOperations(@RequestParam("page") Integer page) throws CalculatorException {
         return operationService.fetchOperations(page);
+    }
+
+    @Operation(method = "DELETE", operationId = "deleteOperation", summary = "Deletes an operation.",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Bad request", responseCode = "400")
+            })
+    @DeleteMapping("{id}")
+    public void deleteOperation(@PathVariable("id") @NotEmpty(message = "Record id should not be null or empty")  String id) throws CalculatorException {
+        operationService.deleteRecord(id);
     }
 }

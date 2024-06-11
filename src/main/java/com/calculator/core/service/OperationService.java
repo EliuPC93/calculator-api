@@ -56,7 +56,7 @@ public class OperationService {
 
         Double balance = optionalUser.get().getCredits().get(0).getAmount();
 
-        List<Record> records =  optionalUser.get().getRecords();
+        List<Record> records =  optionalUser.get().getRecords().stream().filter(Record::getActive).collect(Collectors.toList());
         if (!records.isEmpty()) {
             records.sort(Comparator.comparing(Record::getDate).reversed());
             balance = records.get(0).getUserBalance();
@@ -65,6 +65,7 @@ public class OperationService {
         Record record = Record.builder()
                 .user(optionalUser.get())
                 .operation(operation)
+                .active(true)
                 .date(LocalDateTime.now())
                 .amount(operation.getCost())
                 .build();
@@ -94,8 +95,30 @@ public class OperationService {
         }
         Pageable pageWithElements = PageRequest.of(page, 5);
 
-        // TODO: figure out why is retrieving just a few records
         List<Record> records = recordRepository.findByUserId(userId, pageWithElements);
-        return records.stream().map(RecordDto::from).collect(Collectors.toList());
+
+        return records.stream().filter(Record::getActive).map(RecordDto::from).collect(Collectors.toList());
+    }
+
+    public void deleteRecord(String id) {
+        String correlationId = UUID.randomUUID().toString();
+
+        String userId = authenticationProvider.getUserId();
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (!optionalUser.isPresent()) {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "User not found");
+        }
+
+        Optional<Record> record = recordRepository.findById(id);
+
+        if (record.isPresent()) {
+            Record updatedRecord = record.get();
+            updatedRecord.setActive(false);
+            recordRepository.save(updatedRecord);
+            log.debug("{} - Record have been deleted with id {}", correlationId, updatedRecord.getId());
+        } else {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Record not found");
+        }
     }
 }
