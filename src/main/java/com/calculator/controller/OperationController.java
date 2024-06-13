@@ -2,6 +2,7 @@ package com.calculator.controller;
 
 import com.calculator.core.service.OperationService;
 import com.calculator.data.request.NewOperation;
+import com.calculator.data.response.OperationResponseDto;
 import com.calculator.data.response.RecordDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,8 +33,8 @@ public class OperationController {
                     @ApiResponse(description = "Bad request", responseCode = "400")
             })
     @PostMapping
-    public void register(@Valid @RequestBody NewOperation newOperation) throws CalculatorException {
-        operationService.registerOperation(newOperation);
+    public OperationResponseDto register(@Valid @RequestBody NewOperation newOperation) throws CalculatorException {
+        return operationService.registerOperation(newOperation);
     }
 
     @Operation(method = "GET", operationId = "fetchOperations", summary = "Get operations for user.",

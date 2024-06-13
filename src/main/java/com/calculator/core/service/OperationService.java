@@ -9,6 +9,7 @@ import com.calculator.core.security.CalculatorAuthenticationProvider;
 import com.calculator.data.entity.*;
 import com.calculator.data.entity.Record;
 import com.calculator.data.request.NewOperation;
+import com.calculator.data.response.OperationResponseDto;
 import com.calculator.data.response.RecordDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class OperationService {
     private OperationRepository operationRepository;
     private CalculatorAuthenticationProvider authenticationProvider;
 
-    public void registerOperation(NewOperation newOperation) {
+    public OperationResponseDto registerOperation(NewOperation newOperation) {
         String correlationId = UUID.randomUUID().toString();
 
         String userId = authenticationProvider.getUserId();
@@ -106,6 +107,8 @@ public class OperationService {
         recordRepository.save(record);
 
         log.debug("{} - New record have been stored with id {}", correlationId, record.getId());
+
+        return OperationResponseDto.builder().result(operationResponse).build();
     }
 
     public List<RecordDto> fetchOperations(Integer page) {

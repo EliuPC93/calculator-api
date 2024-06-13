@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class NewEntityDto {
+public class OperationResponseDto {
 
-    private String id;
+    private String result;
 
 }
