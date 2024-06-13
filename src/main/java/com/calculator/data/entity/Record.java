@@ -26,7 +26,7 @@ public class Record extends BaseEntity {
     private Double amount;
 
     @Column(name = "operation_response")
-    private Boolean operationResponse;
+    private String operationResponse;
 
     @Column(name = "active")
     private Boolean active;

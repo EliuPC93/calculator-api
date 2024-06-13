@@ -12,7 +12,7 @@ public class RecordDto {
     private String id;
     private Double amount;
     private String operationType;
-    private Boolean operationResponse;
+    private String operationResponse;
     private Double userBalance;
     private String date;
 

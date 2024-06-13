@@ -33,7 +33,7 @@ public class OperationController {
             })
     @PostMapping
     public void register(@Valid @RequestBody NewOperation newOperation) throws CalculatorException {
-        operationService.register(newOperation);
+        operationService.registerOperation(newOperation);
     }
 
     @Operation(method = "GET", operationId = "fetchOperations", summary = "Get operations for user.",

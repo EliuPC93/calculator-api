@@ -1,10 +1,8 @@
 package com.calculator.data.entity;
 
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public enum OperationType {
 
@@ -26,9 +24,9 @@ public enum OperationType {
     }
 
     public static OperationType fromValue(String value) {
-        for (OperationType deliveryPoint : OperationType.values()) {
-            if (deliveryPoint.value.equals(value)){
-                return deliveryPoint;
+        for (OperationType operationType : OperationType.values()) {
+            if (operationType.value.equals(value)){
+                return operationType;
             }
         }
         throw new InvalidParameterException("Unknown operation of: " + value);

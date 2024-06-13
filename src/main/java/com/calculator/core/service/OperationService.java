@@ -29,7 +29,7 @@ public class OperationService {
     private OperationRepository operationRepository;
     private CalculatorAuthenticationProvider authenticationProvider;
 
-    public void register(NewOperation newOperation) {
+    public void registerOperation(NewOperation newOperation) {
         String correlationId = UUID.randomUUID().toString();
 
         String userId = authenticationProvider.getUserId();
@@ -62,29 +62,50 @@ public class OperationService {
             balance = records.get(0).getUserBalance();
         }
 
+        if (balance < operation.getCost()) {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Insufficient credit");
+        }
+
+        String operationResponse;
+        switch (operationType) {
+            case ADDITION: {
+                operationResponse = Double.toString(newOperation.getNumber1() + newOperation.getNumber2());
+                break;
+            }
+            case SUBTRACTION: {
+                operationResponse = Double.toString(newOperation.getNumber1() - newOperation.getNumber2());
+                break;
+            }
+            case DIVISION:
+                operationResponse = Double.toString(newOperation.getNumber1() / newOperation.getNumber2());
+                break;
+            case MULTIPLICATION:
+                operationResponse = Double.toString(newOperation.getNumber1() * newOperation.getNumber2());
+                break;
+            case SQUAREROOT:
+                operationResponse = Double.toString(Math.sqrt(newOperation.getNumber1()));
+                break;
+            case RANDOMSTRING:
+                // TODO: add third party library for random string
+                operationResponse = "asd";
+                break;
+            default:
+                throw new IllegalStateException("Unexpected operation: " + correlationId);
+        }
+
         Record record = Record.builder()
                 .user(optionalUser.get())
                 .operation(operation)
                 .active(true)
                 .date(LocalDateTime.now())
                 .amount(operation.getCost())
+                .operationResponse(operationResponse)
+                .userBalance(balance - operation.getCost())
                 .build();
-
-        if (balance > operation.getCost()) {
-            record.setOperationResponse(true);
-            record.setUserBalance(balance - operation.getCost());
-        } else {
-            record.setOperationResponse(false);
-            record.setUserBalance(balance);
-        }
 
         recordRepository.save(record);
 
         log.debug("{} - New record have been stored with id {}", correlationId, record.getId());
-
-        if (!record.getOperationResponse()) {
-            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Insufficient credit");
-        }
     }
 
     public List<RecordDto> fetchOperations(Integer page) {
