@@ -28,9 +28,11 @@ public class OperationService {
     private RecordRepository recordRepository;
     private UserRepository userRepository;
     private OperationRepository operationRepository;
+    private RandomStringService randomStringService;
     private CalculatorAuthenticationProvider authenticationProvider;
 
-    public OperationResponseDto registerOperation(NewOperation newOperation) {
+
+    public OperationResponseDto registerOperation(NewOperation newOperation) throws CalculatorException {
         String correlationId = UUID.randomUUID().toString();
 
         String userId = authenticationProvider.getUserId();
@@ -87,8 +89,7 @@ public class OperationService {
                 operationResponse = Double.toString(Math.sqrt(newOperation.getNumber1()));
                 break;
             case RANDOMSTRING:
-                // TODO: add third party library for random string
-                operationResponse = "asd";
+                operationResponse = randomStringService.getRandomString();
                 break;
             default:
                 throw new IllegalStateException("Unexpected operation: " + correlationId);
