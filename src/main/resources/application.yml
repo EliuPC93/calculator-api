@@ -16,6 +16,9 @@ spring:
     username: ${calculator.database.username}
     password: ${calculator.database.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mvc:
+    servlet:
+      path: /v1
 springdoc:
   api-docs:
     path: /specs
