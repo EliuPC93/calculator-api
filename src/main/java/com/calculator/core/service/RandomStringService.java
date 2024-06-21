@@ -30,7 +30,7 @@ public class RandomStringService {
 
             return list.get(0);
         } catch (IOException err) {
-            throw new CalculatorException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CalculatorException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed generating random string");
         }
     }
 
