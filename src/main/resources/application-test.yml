@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: test
+calculator:
+  database:
+    db: calculatordb
+    host: 127.0.0.1
+    username: ipalma
+    password: ntdcalculator123
+    driver-class-name: com.mysql.cj.jdbc.Driver
