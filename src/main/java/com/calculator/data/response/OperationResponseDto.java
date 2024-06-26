@@ -1,12 +1,12 @@
 package com.calculator.data.response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
+@Data
+@ToString
 public class OperationResponseDto {
 
     private String result;

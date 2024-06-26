@@ -32,7 +32,7 @@ public class OperationService {
     private CalculatorAuthenticationProvider authenticationProvider;
 
 
-    public OperationResponseDto registerOperation(NewOperation newOperation) throws CalculatorException {
+    public String registerOperation(NewOperation newOperation) throws CalculatorException {
         String correlationId = UUID.randomUUID().toString();
 
         String userId = authenticationProvider.getUserId();
@@ -109,7 +109,7 @@ public class OperationService {
 
         log.debug("{} - New record have been stored with id {}", correlationId, record.getId());
 
-        return OperationResponseDto.builder().result(operationResponse).build();
+        return operationResponse;
     }
 
     public List<RecordDto> fetchOperations(Integer page) {

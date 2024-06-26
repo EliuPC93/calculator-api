@@ -3,15 +3,14 @@ package com.calculator.data.request;
 import com.calculator.core.exception.CalculatorException;
 import com.calculator.core.exception.ErrorCode;
 import com.calculator.data.entity.OperationType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
 @NoArgsConstructor
+@Builder(toBuilder = true)
+@Data
+@ToString
 public class NewOperation {
     @NotEmpty(message = "Invalid operation")
     private String type;
@@ -26,13 +25,13 @@ public class NewOperation {
             case SUBTRACTION:
             case MULTIPLICATION:
             case DIVISION: {
-                if (this.getNumber1().isNaN() || this.getNumber2().isNaN()) {
+                if (number1 == null || number2 == null) {
                     throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Missing number");
                 }
                 break;
             }
             case SQUAREROOT: {
-                if (this.getNumber1().isNaN()) {
+                if (number1 == null) {
                     throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Missing Number");
                 }
                 break;
@@ -42,6 +41,10 @@ public class NewOperation {
                 this.setNumber2(number2);
                 this.setType(type);
         }
+
+        this.setNumber1(number1);
+        this.setNumber2(number2);
+        this.setType(type);
     }
 
 }

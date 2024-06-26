@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @AllArgsConstructor
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Operation(method = "POST", operationId = "registerUser", summary = "Registers a new user.",
             responses = {

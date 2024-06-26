@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OperationController {
 
-    private OperationService operationService;
+    private final OperationService operationService;
 
     @Operation(method = "POST", operationId = "registerOperation", summary = "Registers a new operation.",
             responses = {
@@ -33,8 +34,14 @@ public class OperationController {
                     @ApiResponse(description = "Bad request", responseCode = "400")
             })
     @PostMapping
-    public OperationResponseDto register(@Valid @RequestBody NewOperation newOperation) throws CalculatorException {
-        return operationService.registerOperation(newOperation);
+    @ResponseStatus(HttpStatus.OK)
+    public OperationResponseDto register(@Valid @RequestBody NewOperation newOperation) throws Exception {
+        try {
+            String operationResponse = operationService.registerOperation(newOperation);
+            return OperationResponseDto.builder().result(operationResponse).build();
+        } catch (CalculatorException exception) {
+            throw new Exception(exception.getMessage());
+        }
     }
 
     @Operation(method = "GET", operationId = "fetchOperations", summary = "Get operations for user.",

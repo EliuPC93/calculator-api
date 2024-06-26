@@ -20,12 +20,12 @@ public class UserControllerIntegrationTest extends BaseSpringBootIntegrationTest
     private UserService userService;
 
     @Test
-    public void createNewOperation_should_returnHttpStatusOk_when_thereAreNoErrors() throws Exception {
+    public void register_should_returnHttpStatusOk_when_thereAreNoErrors() throws Exception {
         NewUser expectedRequest = NewUser.builder().username("jorge@mail.com").password("heyou").build();
 
         UserService userService1 = mock(UserService.class);
         doNothing().when(userService1).register(expectedRequest);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(serverUri, expectedRequest, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(serverUri+"/users", expectedRequest, String.class);
 
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }

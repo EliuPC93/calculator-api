@@ -24,6 +24,6 @@ public class BaseSpringBootIntegrationTest {
 
     @Before
     public void configureIntegrationEnv() throws Exception {
-        serverUri = new URI("http://localhost:" + serverPort + "/v1/users");
+        serverUri = new URI("http://localhost:" + serverPort + "/v1");
     }
 }
