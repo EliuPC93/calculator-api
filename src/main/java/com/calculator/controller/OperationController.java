@@ -4,6 +4,7 @@ import com.calculator.core.service.OperationService;
 import com.calculator.data.request.NewOperation;
 import com.calculator.data.response.OperationResponseDto;
 import com.calculator.data.response.RecordDto;
+import com.calculator.data.response.RecordsReponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -53,9 +54,15 @@ public class OperationController {
             }, parameters = {
             @Parameter(name = "page", description = "Page number"),
     })
+
     @GetMapping
-    public List<RecordDto> fetchOperations(@RequestParam("page") Integer page) throws CalculatorException {
-        return operationService.fetchOperations(page);
+    public RecordsReponse fetchOperations(@RequestParam("page") Integer page) throws Exception {
+        try {
+            List<RecordDto> records = operationService.fetchOperations(page);
+            return RecordsReponse.builder().records(records).build();
+        } catch (Exception exception) {
+            throw new Exception(exception.getMessage());
+        }
     }
 
     @Operation(method = "DELETE", operationId = "deleteOperation", summary = "Deletes an operation.",
@@ -64,7 +71,11 @@ public class OperationController {
                     @ApiResponse(description = "Bad request", responseCode = "400")
             })
     @DeleteMapping("{id}")
-    public void deleteOperation(@PathVariable("id") @NotEmpty(message = "Record id should not be null or empty")  String id) throws CalculatorException {
-        operationService.deleteRecord(id);
+    public void deleteOperation(@PathVariable("id") @NotEmpty(message = "Record id should not be null or empty")  String id) throws Exception {
+     try {
+            operationService.deleteRecord(id);
+        } catch (CalculatorException exception) {
+            throw new Exception(exception.getMessage());
+        }
     }
 }

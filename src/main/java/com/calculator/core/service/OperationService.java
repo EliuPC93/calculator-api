@@ -9,7 +9,6 @@ import com.calculator.core.security.CalculatorAuthenticationProvider;
 import com.calculator.data.entity.*;
 import com.calculator.data.entity.Record;
 import com.calculator.data.request.NewOperation;
-import com.calculator.data.response.OperationResponseDto;
 import com.calculator.data.response.RecordDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -125,7 +124,7 @@ public class OperationService {
         return records.stream().filter(Record::getActive).map(RecordDto::from).collect(Collectors.toList());
     }
 
-    public void deleteRecord(String id) {
+    public void deleteRecord(String id) throws CalculatorException {
         String correlationId = UUID.randomUUID().toString();
 
         String userId = authenticationProvider.getUserId();

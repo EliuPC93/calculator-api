@@ -1,13 +1,12 @@
 package com.calculator.data.response;
 
 import com.calculator.data.entity.Record;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
+@Data
 public class RecordDto {
     private String id;
     private Double amount;
