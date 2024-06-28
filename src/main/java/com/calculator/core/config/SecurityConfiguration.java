@@ -53,6 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/operations/*").hasAuthority(SecurityRole.ACTIVE.getRole())
                 .and()
+                .authorizeRequests().antMatchers("/records/*").hasAuthority(SecurityRole.ACTIVE.getRole())
+                .and()
                 .authorizeRequests().antMatchers("/users/*").permitAll()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil, userRepository))
