@@ -23,10 +23,28 @@ public class UserControllerIntegrationTest extends BaseSpringBootIntegrationTest
     public void register_should_returnHttpStatusOk_when_thereAreNoErrors() throws Exception {
         NewUser expectedRequest = NewUser.builder().username("jorge@mail.com").password("heyou").build();
 
-        UserService userService1 = mock(UserService.class);
-        doNothing().when(userService1).register(expectedRequest);
+        doNothing().when(userService).register(expectedRequest);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(serverUri+"/users", expectedRequest, String.class);
 
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void register_should_returnHttpStatusBadRequest_when_usernameIsMissing() throws Exception {
+        NewUser expectedRequest = NewUser.builder().password("heyou").build();
+
+        doNothing().when(userService).register(expectedRequest);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(serverUri+"/users", expectedRequest, String.class);
+
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+    @Test
+    public void register_should_returnHttpStatusBadRequest_when_passwordIsMissing() throws Exception {
+        NewUser expectedRequest = NewUser.builder().username("pedro@mail.com").build();
+
+        doNothing().when(userService).register(expectedRequest);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(serverUri+"/users", expectedRequest, String.class);
+
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 }

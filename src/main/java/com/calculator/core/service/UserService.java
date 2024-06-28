@@ -4,6 +4,7 @@ import com.calculator.core.repository.CreditRepository;
 import com.calculator.data.entity.Credit;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,14 @@ import java.util.UUID;
 @Slf4j
 public class UserService {
 
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private CreditRepository creditRepository;
+    @Autowired
     private PasswordEncoder passwordEncryptor;
 
-    public void register(NewUser newUser) {
+    public void register(NewUser newUser) throws CalculatorException {
         String correlationId = UUID.randomUUID().toString();
 
         Optional<User> optionalUserByUsername = userRepository.findByUsername(newUser.getUsername());
@@ -35,10 +39,10 @@ public class UserService {
             throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Username already exists");
         }
 
-        log.debug("{} - Encrypting password for new user");
+        log.debug("{} - Encrypting password for new user", correlationId);
         String encryptedPassword = passwordEncryptor.encode(newUser.getPassword());
 
-        log.debug("{} - Creating authentication details for user");
+        log.debug("{} - Creating authentication details for user", correlationId);
         AuthenticationDetail authenticationDetail = AuthenticationDetail.builder()
                 .roles(SecurityRole.ACTIVE.getRole()).build();
 
