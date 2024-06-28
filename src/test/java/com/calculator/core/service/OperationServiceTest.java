@@ -51,18 +51,36 @@ public class OperationServiceTest {
     }
 
     @Test
-    public void registerOperation_should_saveNewOperation() throws CalculatorException {
+    public void registerOperation_should_saveNewOperation_and_returnExpectedOperationResponse() throws CalculatorException {
         String expectedUserId = "123";
         when(authenticationProvider.getUserId()).thenReturn(expectedUserId);
         Optional<User> optionalUser = Optional.of(User.builder().username("a name").password("a password").status(true).build());
         when(userRepository.findById(expectedUserId)).thenReturn(optionalUser);
         NewOperation expectedRequest = NewOperation.builder().type("addition").number1(2.1).number2(2.2).build();
         when(operationRepository.findByType(expectedRequest.getType())).thenReturn(Optional.empty());
-
         String expectedOperationResponse = Double.toString(2.1 + 2.2);
+
         String response = operationService.registerOperation(expectedRequest);
 
         verify(operationRepository).save(any(Operation.class));
+        verify(recordService).register(any(User.class), any(Operation.class), any(String.class), any(String.class));
+
+        Assert.assertEquals(response, expectedOperationResponse);
+    }
+    @Test
+    public void registerOperation_should_useExistingOperation_and_returnExpectedOperationResponse() throws CalculatorException {
+        String expectedUserId = "123";
+        when(authenticationProvider.getUserId()).thenReturn(expectedUserId);
+        Optional<User> optionalUser = Optional.of(User.builder().username("a name").password("a password").status(true).build());
+        when(userRepository.findById(expectedUserId)).thenReturn(optionalUser);
+        NewOperation expectedRequest = NewOperation.builder().type("addition").number1(2.1).number2(2.2).build();
+        Optional<Operation> existingOperation = Optional.of(Operation.builder().type(expectedRequest.getType()).cost(23.0).build());
+        when(operationRepository.findByType(expectedRequest.getType())).thenReturn(existingOperation);
+        String expectedOperationResponse = Double.toString(2.1 + 2.2);
+
+        String response = operationService.registerOperation(expectedRequest);
+
+        verify(operationRepository, times(0)).save(any(Operation.class));
         verify(recordService).register(any(User.class), any(Operation.class), any(String.class), any(String.class));
 
         Assert.assertEquals(response, expectedOperationResponse);

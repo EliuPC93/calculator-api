@@ -33,7 +33,6 @@ public class RecordService {
     @Autowired
     private UserRepository userRepository;
 
-
     @Autowired
     private CalculatorAuthenticationProvider authenticationProvider;
 
