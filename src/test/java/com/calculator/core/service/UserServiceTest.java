@@ -37,7 +37,7 @@ public class UserServiceTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void register_should_throwException_whenUserIsFound() throws CalculatorException {
+    public void register_should_throwException_whenUserIsFound() {
         NewUser expectedNewUser = NewUser.builder().username("jorge@mail.com").password("heyou").build();
         Optional<User> optionalUser = Optional.of(User.builder().username(expectedNewUser.getUsername()).password(expectedNewUser.getPassword()).status(true).build());
         when(userRepository.findByUsername(expectedNewUser.getUsername())).thenReturn(optionalUser);
@@ -47,7 +47,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void register_should_registerNewUser_whenThereAreNoErrors() throws CalculatorException {
+    public void register_should_registerNewUser_whenThereAreNoErrors() {
         NewUser expectedNewUser = NewUser.builder().username("jorge@mail.com").password("heyou").build();
         when(userRepository.findByUsername(expectedNewUser.getUsername())).thenReturn( Optional.empty());
         when(passwordEncryptor.encode(expectedNewUser.getPassword())).thenReturn( "myencodedpswd");
