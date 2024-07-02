@@ -4,13 +4,16 @@ import com.calculator.core.service.UserService;
 import com.calculator.data.request.NewUser;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.*;
 
+@RunWith(SpringRunner.class)
 public class UserControllerIntegrationTest extends BaseSpringBootIntegrationTest {
 
     @Autowired
