@@ -37,10 +37,10 @@ calculator:
     secret: jWTZ3kr3T0019
     validity: 216000
   database:
-    db: calculatordb
-    host: localhost
-    username: ipalma
-    password: ntdcalculator123
+    db: u726612052_calculator
+    host: srv534.hstgr.io
+    username: calcuser
+    password: wYspih-gompyx-1tadte
 management:
   endpoints:
     web:
