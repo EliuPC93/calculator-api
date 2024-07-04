@@ -1,4 +1,5 @@
 /Users/eliupc/projects/ntd/back/src/main/java/com/calculator/CalculatorApplication.java
+/Users/eliupc/projects/ntd/back/src/main/java/com/calculator/controller/HealthCheckController.java
 /Users/eliupc/projects/ntd/back/src/main/java/com/calculator/controller/OperationController.java
 /Users/eliupc/projects/ntd/back/src/main/java/com/calculator/controller/RecordController.java
 /Users/eliupc/projects/ntd/back/src/main/java/com/calculator/controller/UserController.java
