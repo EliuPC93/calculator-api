@@ -39,7 +39,7 @@ calculator:
   database:
     db: u726612052_calculator
     host: srv534.hstgr.io
-    username: calcuser
+    username: u726612052_calcuser
     password: wYspih-gompyx-1tadte
 management:
   endpoints:
