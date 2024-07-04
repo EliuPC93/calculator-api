@@ -12,7 +12,7 @@ spring:
             non_contextual_creation: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: jdbc:mysql://${calculator.database.host}:3306/${calculator.database.db}
+    url: jdbc:mysql://${calculator.database.host}/${calculator.database.db}?enabledTLSProtocols=TLSv1.2
     username: ${calculator.database.username}
     password: ${calculator.database.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -38,7 +38,7 @@ calculator:
     validity: 216000
   database:
     db: u726612052_calculator
-    host: srv534.hstgr.io
+    host: 185.28.21.1
     username: u726612052_calcuser
     password: wYspih-gompyx-1tadte
 management:
