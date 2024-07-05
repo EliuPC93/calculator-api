@@ -5,6 +5,6 @@ calculator:
   database:
     db: calculatordb
     host: 127.0.0.1
-    username: ipalma
+    username: calculatoruser
     password: ntdcalculator123
     driver-class-name: com.mysql.cj.jdbc.Driver

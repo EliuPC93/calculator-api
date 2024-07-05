@@ -3,8 +3,8 @@ spring:
     active: test
 calculator:
   database:
-    db: calculatordb
-    host: 127.0.0.1
-    username: ipalma
-    password: ntdcalculator123
+    db: u726612052_calculator
+    host: 185.28.21.1
+    username: u726612052_calcuser
+    password: wYspih-gompyx-1tadte
     driver-class-name: com.mysql.cj.jdbc.Driver
