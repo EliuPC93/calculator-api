@@ -28,7 +28,7 @@ After successfully installing MYSQL in the local machine do the following:
 * create a new user called `calcualtoruser` and password `ntdcalculator123`
 * grant all persmissions to `calcualtoruser` to `calculatordb`
 * on a new terminal start the MYSQL service running `mysqld`
-* Replace the values of the lines 40 to 43 with the following values
+* Replace the values of the lines 40 to 43 of the `application.yml` file with the following values
 ```
   db: calculatordb
   host: 127.0.0.1
