@@ -28,4 +28,14 @@ public class UserController {
     public void register(@Valid @RequestBody NewUser newUser) throws CalculatorException {
         userService.register(newUser);
     }
+
+    @Operation(method = "PUT", operationId = "addCredit", summary = "Add credit to a user.",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Bad request", responseCode = "400")
+            })
+    @PutMapping("/credit/{amount}")
+    public void extendCredit(@PathVariable("amount") Double amount) throws CalculatorException {
+        userService.extendCredit(amount);
+    }
 }

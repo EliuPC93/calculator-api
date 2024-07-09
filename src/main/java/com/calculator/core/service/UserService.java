@@ -1,6 +1,7 @@
 package com.calculator.core.service;
 
 import com.calculator.core.repository.CreditRepository;
+import com.calculator.core.security.CalculatorAuthenticationProvider;
 import com.calculator.data.entity.Credit;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,8 @@ public class UserService {
     private CreditRepository creditRepository;
     @Autowired
     private PasswordEncoder passwordEncryptor;
+    @Autowired
+    private CalculatorAuthenticationProvider authenticationProvider;
 
     public void register(NewUser newUser) throws CalculatorException {
         String correlationId = UUID.randomUUID().toString();
@@ -56,13 +59,31 @@ public class UserService {
 
         log.debug("{} - New user have been stored with id {}", correlationId, user.getId());
 
-        Credit firstCredit = Credit.builder()
-                .amount(1000.00)
-                .user(user)
-                .build();
+        addCredit(1000.00, user, correlationId);
+    }
 
-        creditRepository.save(firstCredit);
+    public void extendCredit (Double amount) {
+        String correlationId = UUID.randomUUID().toString();
 
-        log.debug("{} - New credit {} have been created to user with id {}", correlationId, firstCredit.getId(), user.getId());
+        String userId = authenticationProvider.getUserId();
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (!optionalUser.isPresent()) {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "User not found");
+        }
+
+        if (amount <= 0) {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Amount should be positive");
+        }
+
+        addCredit(amount, optionalUser.get(), correlationId);
+    }
+
+    private void addCredit (Double amount, User user, String correlationId) {
+        Credit newCredit = Credit.builder().amount(amount).user(user).build();
+
+        creditRepository.save(newCredit);
+
+        log.debug("{} - New credit {} have been added to user with id {}", correlationId, newCredit.getId(), user.getId());
     }
 }
