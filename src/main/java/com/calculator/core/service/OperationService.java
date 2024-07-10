@@ -74,6 +74,9 @@ public class OperationService {
             case MULTIPLICATION:
                 return Double.toString(newOperation.getNumber1() * newOperation.getNumber2());
             case SQUAREROOT:
+                if (newOperation.getNumber1() < 0) {
+                    throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Invalid number");
+                }
                 return Double.toString(Math.sqrt(newOperation.getNumber1()));
             case RANDOMSTRING:
                 return randomStringService.getRandomString();

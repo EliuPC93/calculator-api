@@ -3,7 +3,6 @@ package com.calculator.data.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -33,5 +32,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Record> records;
+
+    public Double getUserBalance() {
+        Double allCreditsSum = this.getCredits().stream().map(Credit::getAmount).reduce(0.0, Double::sum);
+        Double allRecordsCostSum =  this.getRecords().stream().filter(Record::getActive).map(Record::getAmount).reduce(0.0, Double::sum);;
+
+        return allCreditsSum - allRecordsCostSum;
+    }
 
 }
