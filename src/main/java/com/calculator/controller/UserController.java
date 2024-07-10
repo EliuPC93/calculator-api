@@ -1,5 +1,6 @@
 package com.calculator.controller;
 
+import com.calculator.data.request.NewCredit;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
@@ -34,8 +35,12 @@ public class UserController {
                     @ApiResponse(description = "Success", responseCode = "200"),
                     @ApiResponse(description = "Bad request", responseCode = "400")
             })
-    @PutMapping("/credit/{amount}")
-    public void extendCredit(@PathVariable("amount") Double amount) throws CalculatorException {
-        userService.extendCredit(amount);
+    @PutMapping("/credit")
+    public void extendCredit(@Valid @RequestBody NewCredit newCredit) throws Exception {
+        try {
+            userService.extendCredit(newCredit);
+        } catch (CalculatorException exception) {
+            throw new Exception(exception.getMessage());
+        }
     }
 }

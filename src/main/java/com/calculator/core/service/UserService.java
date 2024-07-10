@@ -3,6 +3,7 @@ package com.calculator.core.service;
 import com.calculator.core.repository.CreditRepository;
 import com.calculator.core.security.CalculatorAuthenticationProvider;
 import com.calculator.data.entity.Credit;
+import com.calculator.data.request.NewCredit;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,21 +63,16 @@ public class UserService {
         addCredit(1000.00, user, correlationId);
     }
 
-    public void extendCredit (Double amount) {
+    public void extendCredit (NewCredit newCredit) {
         String correlationId = UUID.randomUUID().toString();
 
-        String userId = authenticationProvider.getUserId();
-        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<User> optionalUser = userRepository.findByUsername(newCredit.getUsername());
 
         if (!optionalUser.isPresent()) {
             throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "User not found");
         }
 
-        if (amount <= 0) {
-            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Amount should be positive");
-        }
-
-        addCredit(amount, optionalUser.get(), correlationId);
+        addCredit(newCredit.getAmount(), optionalUser.get(), correlationId);
     }
 
     private void addCredit (Double amount, User user, String correlationId) {
