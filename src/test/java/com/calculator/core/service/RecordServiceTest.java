@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -41,7 +42,7 @@ public class RecordServiceTest {
 
     @Test
     public void registerRecord_should_createFirstRecord() {
-        List<Record> records = new ArrayList<>();
+        Set<Record> records = new CopyOnWriteArraySet<>();
         User user = User.builder().username("a name").password("a password").records(records).status(true).build();
         Credit credit = Credit.builder().user(user).amount(100.0).build();
         List<Credit> credits = new ArrayList<>();
@@ -58,8 +59,8 @@ public class RecordServiceTest {
 
     @Test
     public void registerRecord_should_createSecondRecord() {
-        List<Record> records = new ArrayList<>();
-        Record firstRecord = Record.builder().userBalance(90.0).date(LocalDateTime.now()).active(true).build();
+        Set<Record> records = new CopyOnWriteArraySet<>();
+        Record firstRecord = Record.builder().userBalance(90.0).amount(10.0).date(LocalDateTime.now()).active(true).build();
         records.add(firstRecord);
         User user = User.builder().username("a name").password("a password").records(records).status(true).build();
         List<Credit> credits = new ArrayList<>();
@@ -77,12 +78,12 @@ public class RecordServiceTest {
 
     @Test
     public void registerRecord_should_throw_whenInsufficientCredit() {
-        List<Record> records = new ArrayList<>();
-        Record firstRecord = Record.builder().userBalance(10.0).date(LocalDateTime.now()).active(true).build();
+        Set<Record> records = new CopyOnWriteArraySet<>();
+        Record firstRecord = Record.builder().userBalance(0.0).date(LocalDateTime.now()).amount(50.0).active(true).build();
         records.add(firstRecord);
         User user = User.builder().username("a name").password("a password").records(records).status(true).build();
         List<Credit> credits = new ArrayList<>();
-        Credit credit = Credit.builder().user(user).amount(100.0).build();
+        Credit credit = Credit.builder().user(user).amount(30.0).build();
         credits.add(credit);
         user.setCredits(credits);
         Operation operation = Operation.builder().type("addition").cost(23.0).build();
