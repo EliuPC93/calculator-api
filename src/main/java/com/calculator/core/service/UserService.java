@@ -2,6 +2,7 @@ package com.calculator.core.service;
 
 import com.calculator.core.repository.CreditRepository;
 import com.calculator.data.entity.Credit;
+import com.calculator.data.request.NewCredit;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +57,36 @@ public class UserService {
 
         log.debug("{} - New user have been stored with id {}", correlationId, user.getId());
 
-        Credit firstCredit = Credit.builder()
-                .amount(1000.00)
-                .user(user)
-                .build();
+        addCredit(1000.00, user, correlationId);
+    }
 
-        creditRepository.save(firstCredit);
+    public void extendCredit (NewCredit newCredit) {
+        String correlationId = UUID.randomUUID().toString();
 
-        log.debug("{} - New credit {} have been created to user with id {}", correlationId, firstCredit.getId(), user.getId());
+        Optional<User> optionalUser = userRepository.findByUsername(newCredit.getUsername());
+
+        if (!optionalUser.isPresent()) {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "User not found");
+        }
+
+        addCredit(newCredit.getAmount(), optionalUser.get(), correlationId);
+    }
+
+    private void addCredit (Double amount, User user, String correlationId) {
+        Credit newCredit = Credit.builder().amount(amount).user(user).build();
+
+        creditRepository.save(newCredit);
+
+        log.debug("{} - New credit {} have been added to user with id {}", correlationId, newCredit.getId(), user.getId());
+    }
+
+    public Double retrieveUserBalance(String username) throws CalculatorException {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (!optionalUser.isPresent()) {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "User not found");
+        }
+
+        return optionalUser.get().getUserBalance();
     }
 }

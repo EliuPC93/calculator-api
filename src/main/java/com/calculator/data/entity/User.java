@@ -3,8 +3,8 @@ package com.calculator.data.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,10 +28,17 @@ public class User extends BaseEntity {
     @JoinColumn(name = "authentication_detail_id", referencedColumnName = "id")
     private AuthenticationDetail authenticationDetail;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Credit> credits;
 
-    @OneToMany(mappedBy = "user")
-    private List<Record> records;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Record> records;
+
+    public Double getUserBalance() {
+        Double allCreditsSum = this.getCredits().stream().map(Credit::getAmount).reduce(0.0, Double::sum);
+        Double allRecordsCostSum =  this.getRecords().stream().filter(Record::getActive).map(Record::getAmount).reduce(0.0, Double::sum);;
+
+        return allCreditsSum - allRecordsCostSum;
+    }
 
 }

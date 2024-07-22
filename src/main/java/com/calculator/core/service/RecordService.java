@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,13 +37,7 @@ public class RecordService {
 
 
     public void register(User user, Operation operation, String operationResponse, String correlationId) {
-        Double balance = user.getCredits().get(0).getAmount();
-
-        List<Record> records =  user.getRecords().stream().filter(Record::getActive).collect(Collectors.toList());
-        if (!records.isEmpty()) {
-            records.sort(Comparator.comparing(Record::getDate).reversed());
-            balance = records.get(0).getUserBalance();
-        }
+        Double balance = user.getUserBalance();
 
         if (balance < operation.getCost()) {
             throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "Insufficient credit");
