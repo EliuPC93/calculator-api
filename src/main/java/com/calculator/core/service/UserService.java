@@ -1,7 +1,6 @@
 package com.calculator.core.service;
 
 import com.calculator.core.repository.CreditRepository;
-import com.calculator.core.security.CalculatorAuthenticationProvider;
 import com.calculator.data.entity.Credit;
 import com.calculator.data.request.NewCredit;
 import lombok.AllArgsConstructor;
@@ -32,8 +31,6 @@ public class UserService {
     private CreditRepository creditRepository;
     @Autowired
     private PasswordEncoder passwordEncryptor;
-    @Autowired
-    private CalculatorAuthenticationProvider authenticationProvider;
 
     public void register(NewUser newUser) throws CalculatorException {
         String correlationId = UUID.randomUUID().toString();
@@ -81,5 +78,15 @@ public class UserService {
         creditRepository.save(newCredit);
 
         log.debug("{} - New credit {} have been added to user with id {}", correlationId, newCredit.getId(), user.getId());
+    }
+
+    public Double retrieveUserBalance(String username) throws CalculatorException {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (!optionalUser.isPresent()) {
+            throw new CalculatorException(ErrorCode.VALIDATION_ERROR, "User not found");
+        }
+
+        return optionalUser.get().getUserBalance();
     }
 }

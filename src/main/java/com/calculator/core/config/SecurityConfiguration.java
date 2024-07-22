@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().userDetailsService(jwtUserDetailService)
-                .authorizeRequests().antMatchers("/", "/index", "/index.html", "/security/login").permitAll()
+                .authorizeRequests().antMatchers("/", "/index", "/index.html", "/security/login", "/calculator-websocket").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/operations/*").hasAuthority(SecurityRole.ACTIVE.getRole())
                 .and()
