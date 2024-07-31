@@ -9,7 +9,8 @@
     <version>0.1.0-SNAPSHOT</version>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
+        <java.runtime.version>17</java.runtime.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <start-class>com.calculator.CalculatorApplication</start-class>
         <spring-cloud.version>Greenwich.SR6</spring-cloud.version>
